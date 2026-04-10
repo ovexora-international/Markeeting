@@ -1,103 +1,180 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Product Store</title>
+    <title>Digital Product Reseller System</title>
     <style>
-        :root { --primary: #25d366; --dark: #128c7e; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; text-align: center; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h1 { color: #333; font-size: 22px; }
-        .product-box { border: 2px solid #eee; margin: 15px 0; padding: 15px; border-radius: 10px; transition: 0.3s; }
-        .product-box:hover { border-color: var(--primary); }
-        .price-tag { font-size: 28px; font-weight: bold; color: var(--dark); }
-        .buy-btn { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; margin-top: 10px; }
+        :root { --primary-color: #075e54; --accent-color: #25d366; --gold: #ffd700; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 10px; text-align: center; color: #333; }
+        .container { max-width: 600px; margin: auto; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 20px; }
+        .header { background: var(--primary-color); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
         
-        /* Payment Modal style */
-        #payment-section { display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #ccc; }
-        .account-details { background: #e7f3ef; padding: 15px; border-radius: 8px; margin: 15px 0; color: #155724; }
-        .copy-text { font-size: 20px; font-weight: bold; letter-spacing: 1px; }
-        input, button[type="submit"] { width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
-        button[type="submit"] { background: #007bff; color: white; border: none; cursor: pointer; }
+        /* Product Cards */
+        .product-grid { display: grid; gap: 15px; margin-bottom: 20px; }
+        .product-card { border: 2px solid #eef0f2; border-radius: 15px; padding: 15px; transition: 0.3s; position: relative; }
+        .product-card.reseller { border-color: var(--gold); background: #fffdf0; }
+        .price-badge { font-size: 24px; font-weight: bold; color: var(--primary-color); display: block; margin: 10px 0; }
+        
+        /* Buttons */
+        .btn { border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        .btn-buy { background: var(--primary-color); color: white; }
+        .btn-sale { background: #ff9800; color: white; display: none; } 
+        
+        /* Payment Section */
+        #payment-modal, #register-section { display: none; margin-top: 20px; padding: 20px; border-top: 2px solid #eee; background: #f9f9f9; border-radius: 10px; }
+        .account-box { background: #dcf8c6; padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px solid #c5e1a5; }
+        .acc-number { font-size: 22px; font-weight: bold; color: #128c7e; letter-spacing: 1px; }
+
+        /* Form Styling */
+        .form-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; text-align: right; }
+        .reg-header { color: var(--primary-color); font-weight: bold; margin-bottom: 10px; }
+
+        .loading { color: #666; font-style: italic; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Digital Products Store</h1>
-    <p>Apna pasandida package select karein</p>
-
-    <div class="product-box">
-        <h3>Basic Package</h3>
-        <div class="price-tag">Rs. 200</div>
-        <button class="buy-btn" onclick="showPayment(200)">Buy Now</button>
+    <div class="header">
+        <h2>Digital Store (Old System)</h2>
+        <p id="status-msg" class="loading">Checking System Status...</p>
     </div>
 
-    <div class="product-box">
-        <h3>Premium Package</h3>
-        <div class="price-tag">Rs. 300</div>
-        <button class="buy-btn" onclick="showPayment(300)">Buy Now</button>
-    </div>
-
-    <div class="product-box">
-        <h3>Master Reseller</h3>
-        <div class="price-tag">Rs. 500</div>
-        <button class="buy-btn" onclick="showPayment(500)">Buy Now</button>
-    </div>
-
-    <div id="payment-section">
-        <h3>Payment Step</h3>
-        <p>Niche diye gaye account par <strong id="selected-price">0</strong> PKR bhejein</p>
-        
-        <div class="account-details">
-            <p><strong>Account Title:</strong> <span id="acc-title">Loading...</span></p>
-            <p><strong>Account Number:</strong><br> <span class="copy-text" id="acc-num">0000000000</span></p>
+    <div class="product-grid">
+        <div class="product-card">
+            <h3>Basic Canva Bundle</h3>
+            <span class="price-badge">Rs. 200</span>
+            <button class="btn btn-buy" onclick="openPayment(200)">Buy Now</button>
+            <button class="btn btn-sale" id="sale-btn-200" onclick="openResellerForm()">Sale & Share</button>
         </div>
 
-        <form id="submission-form">
-            <input type="text" placeholder="Your Name" required>
-            <input type="text" placeholder="Transaction ID (TRX)" required>
-            <p style="font-size: 12px; color: gray;">Payment screenshot ki link ya detail yahan likhein</p>
-            <input type="text" placeholder="Screenshot Link / Detail" required>
-            <button type="submit">Submit for Approval</button>
-        </form>
+        <div class="product-card">
+            <h3>Marketing Guide</h3>
+            <span class="price-badge">Rs. 300</span>
+            <button class="btn btn-buy" onclick="openPayment(300)">Buy Now</button>
+            <button class="btn btn-sale" id="sale-btn-300" onclick="openResellerForm()">Sale & Share</button>
+        </div>
+
+        <div class="product-card reseller">
+            <h3>Master Reseller Rights</h3>
+            <span class="price-badge">Rs. 500</span>
+            <button class="btn btn-buy" onclick="openPayment(500)">Buy Now</button>
+            <button class="btn btn-sale" id="sale-btn-500" onclick="openResellerForm()">Sale & Share</button>
+        </div>
+    </div>
+
+    <div id="payment-modal">
+        <h4 id="payment-title">Payment Details</h4>
+        <div class="account-box">
+            <p><strong>Account Title:</strong> <span id="display-title">---</span></p>
+            <p><strong>Account Number:</strong><br> <span class="acc-number" id="display-num">---</span></p>
+        </div>
+        <button class="btn" style="background:#007bff; color:white;" onclick="showReg()">I Have Paid - Register Now</button>
+    </div>
+
+    <div id="register-section">
+        <div class="reg-header">Apni Details Bharein (Registration)</div>
+        <p style="font-size: 12px; color: #666;">Ye information aapka link generate karne ke liye hai.</p>
+        <input type="text" id="reg-name" class="form-input" placeholder="Apka Mukammal Naam">
+        <input type="text" id="reg-title" class="form-input" placeholder="Account Title (e.g. Ali Khan)">
+        <input type="text" id="reg-num" class="form-input" placeholder="EasyPaisa No (bin 0 ke, e.g. 3001234567)">
+        <input type="text" id="reg-trx" class="form-input" placeholder="Transaction ID (Trx ID)">
+        <button class="btn" style="background:var(--accent-color); color:white;" onclick="autoRegister()">Submit to Admin</button>
     </div>
 </div>
 
 <script>
-    // 1. Data Logic (Sheet ki jagah filhal yahan data rakha hai)
-    const sellers = [
-        { id: "admin", title: "Admin Official", phone: "3001234567" },
-        { id: "ali786", title: "Ali Enterprises", phone: "3159988776" },
-        { id: "user01", title: "Hamza Traders", phone: "3450001122" }
-    ];
+    const sheetID = "1xGSilGQE31f50oGFsPhvJHkteVBDtDqREFY3bmbFSgI";
+    const scriptURL = "YAHAN_APNA_APPS_SCRIPT_URL_LAGAYEN"; // 01. Apna Apps Script URL yahan lagayen
+    const base = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
 
-    // 2. URL se Seller ID check karna
     const urlParams = new URLSearchParams(window.location.search);
-    const currentSellerId = urlParams.get('s') || "admin";
+    const sellerID = urlParams.get('s') || "admin"; 
+    const currentUserID = localStorage.getItem('user_id') || ""; 
 
-    // 3. Seller dhondna aur data set karna
-    const seller = sellers.find(s => s.id === currentSellerId) || sellers[0];
-    
-    // Account number ke shuru mein '0' lagana (Aapki requirement)
-    const finalAccountNum = "0" + seller.phone;
-    const finalAccountTitle = seller.title;
+    async function initSystem() {
+        try {
+            const res = await fetch(base);
+            const text = await res.text();
+            const json = JSON.parse(text.substr(47).slice(0, -2));
+            const rows = json.table.rows;
 
-    function showPayment(price) {
-        document.getElementById('selected-price').innerText = price;
-        document.getElementById('acc-title').innerText = finalAccountTitle;
-        document.getElementById('acc-num').innerText = finalAccountNum;
-        document.getElementById('payment-section').style.display = 'block';
+            let activeSeller = null;
+            let currentUserStatus = "Guest";
+
+            rows.forEach(row => {
+                const sID = row.c[0] ? row.c[0].v : ""; 
+                const accTitle = row.c[2] ? row.c[2].v : ""; 
+                const accNum = row.c[3] ? row.c[3].v : ""; 
+                const status = row.c[4] ? row.c[4].v : ""; 
+
+                if (sID == sellerID) {
+                    activeSeller = { title: accTitle, num: "0" + accNum }; 
+                }
+                if (sID == currentUserID && status == "Approved") {
+                    currentUserStatus = "Approved";
+                }
+            });
+
+            updateUI(activeSeller, currentUserStatus);
+        } catch (e) { document.getElementById('status-msg').innerText = "Connection Error"; }
+    }
+
+    function updateUI(seller, status) {
+        document.getElementById('status-msg').innerText = "System Active";
+        if (status === "Approved") {
+            document.querySelectorAll('.btn-buy').forEach(b => b.style.display = 'none');
+            document.querySelectorAll('.btn-sale').forEach(b => b.style.display = 'block');
+            document.getElementById('status-msg').innerText = "Welcome Back, Seller!";
+        }
+        if (seller) {
+            document.getElementById('display-title').innerText = seller.title;
+            document.getElementById('display-num').innerText = seller.num;
+        }
+    }
+
+    function openPayment(price) {
+        document.getElementById('payment-modal').style.display = 'block';
+        document.getElementById('register-section').style.display = 'none';
         window.scrollTo(0, document.body.scrollHeight);
     }
 
-    // 4. Form Submit Logic
-    document.getElementById('submission-form').onsubmit = function(e) {
-        e.preventDefault();
-        alert("Shukriya! Aapki request approval ke liye bhej di gayi hai. Verify hone ke baad aapko link mil jayega.");
-        location.reload();
-    };
+    function showReg() {
+        document.getElementById('register-section').style.display = 'block';
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    async function autoRegister() {
+        const uID = "user_" + Math.floor(Math.random() * 10000);
+        const data = {
+            id: uID,
+            name: document.getElementById('reg-name').value,
+            title: document.getElementById('reg-title').value,
+            number: document.getElementById('reg-num').value,
+            trx: document.getElementById('reg-trx').value
+        };
+
+        if(!data.name || !data.number) { alert("Please fill all fields"); return; }
+
+        // Data sheet mein bhejna
+        try {
+            await fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(data)
+            });
+            localStorage.setItem('user_id', uID);
+            alert("Application Sent! Admin approval ke baad aapka 'Sale' button on ho jayega. ID: " + uID);
+            location.reload();
+        } catch (e) { alert("Error sending data"); }
+    }
+
+    function openResellerForm() {
+        alert("Approved! Apna link copy karein:\n" + window.location.origin + window.location.pathname + "?s=" + currentUserID);
+    }
+
+    initSystem();
 </script>
 
 </body>
