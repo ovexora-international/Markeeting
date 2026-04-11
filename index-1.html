@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Digital Reseller Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070e;
+  --card:#0c1020;
+  --card2:#0f1525;
+  --card3:#131d30;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.1);
+  --gold:#f5c842;
+  --gold2:#fde68a;
+  --goldd:#c9991a;
+  --goldx:rgba(245,200,66,0.12);
+  --green:#22c55e;
+  --blue:#3b82f6;
+  --purple:#a855f7;
+  --red:#ef4444;
+  --sub:#64748b;
+  --sub2:#94a3b8;
+  --text:#e2e8f0;
+  --radius:20px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{min-height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* ─── BG GLOW ─── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -5%,rgba(245,200,66,0.12) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 35% at 95% 90%,rgba(59,130,246,0.07) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 30% at 5%  70%,rgba(168,85,247,0.05) 0%,transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 0 80px;}
+
+/* ─── PAGE LOADER ─── */
+#page-loader{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:20px;z-index:99999;transition:opacity .5s;
+}
+.ld-brand{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.ld-icon{
+  width:64px;height:64px;border-radius:18px;
+  background:linear-gradient(135deg,var(--gold),var(--goldd));
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  box-shadow:0 0 30px rgba(245,200,66,0.35);
+  animation:ldPulse 1.5s infinite;
+}
+@keyframes ldPulse{0%,100%{box-shadow:0 0 20px rgba(245,200,66,0.3);}50%{box-shadow:0 0 45px rgba(245,200,66,0.6);}}
+.ld-name{font-size:22px;font-weight:900;color:#fff;letter-spacing:1px;}
+.ld-name span{color:var(--gold);}
+.ld-dots{display:flex;gap:7px;}
+.ld-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);opacity:.2;animation:ldBounce 1.3s infinite;}
+.ld-dot:nth-child(2){animation-delay:.18s;}
+.ld-dot:nth-child(3){animation-delay:.36s;}
+@keyframes ldBounce{0%,80%,100%{opacity:.15;transform:scale(.75);}40%{opacity:1;transform:scale(1.3);}}
+
+/* ─── TOAST ─── */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(15,21,37,0.95);backdrop-filter:blur(16px);
+  border:1px solid var(--border2);
+  color:#fff;font-size:13px;font-weight:700;
+  padding:13px 26px;border-radius:40px;
+  opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:99999;
+  pointer-events:none;white-space:nowrap;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ─── HEADER ─── */
+.hdr{
+  padding:32px 22px 24px;
+  text-align:center;
+  position:relative;
+  border-bottom:1px solid var(--border);
+}
+.hdr-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);
+  color:var(--gold);font-size:10px;font-weight:800;
+  padding:5px 14px;border-radius:20px;margin-bottom:14px;
+  letter-spacing:1.5px;text-transform:uppercase;
+}
+.hdr-logo-wrap{
+  width:66px;height:66px;border-radius:20px;
+  background:linear-gradient(135deg,var(--gold),var(--goldd));
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin:0 auto 14px;
+  box-shadow:0 0 28px rgba(245,200,66,0.3);
+  position:relative;
+}
+.hdr-logo-wrap::after{
+  content:'';position:absolute;inset:-3px;border-radius:23px;
+  border:1.5px solid rgba(245,200,66,0.25);pointer-events:none;
+}
+.hdr-title{font-size:27px;font-weight:900;color:#fff;line-height:1.15;letter-spacing:-.3px;}
+.hdr-title span{
+  color:transparent;
+  background:linear-gradient(135deg,var(--gold),#fbbf24,var(--gold2));
+  -webkit-background-clip:text;background-clip:text;
+}
+.hdr-sub{font-size:13px;color:var(--sub2);margin-top:7px;font-weight:500;}
+.status-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);
+  color:var(--green);font-size:11px;font-weight:700;
+  padding:6px 16px;border-radius:20px;margin-top:14px;
+  letter-spacing:.5px;
+}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.8s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.15;}}
+
+/* ─── STEPS STRIP ─── */
+.steps-strip{
+  display:flex;align-items:center;justify-content:center;
+  gap:0;padding:20px 16px;
+  border-bottom:1px solid var(--border);
+}
+.step-item{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  flex:1;position:relative;
+}
+.step-item:not(:last-child)::after{
+  content:'';position:absolute;top:14px;right:-50%;
+  width:100%;height:1.5px;
+  background:linear-gradient(90deg,var(--border2),var(--border));
+  z-index:0;
+}
+.step-num{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;z-index:1;
+  background:var(--card2);border:1.5px solid var(--border2);
+  color:var(--sub);transition:.3s;
+}
+.step-item.active .step-num{
+  background:linear-gradient(135deg,var(--gold),var(--goldd));
+  border-color:var(--gold);color:#000;
+  box-shadow:0 0 12px rgba(245,200,66,0.4);
+}
+.step-item.done .step-num{background:rgba(34,197,94,0.15);border-color:var(--green);color:var(--green);}
+.step-lbl{font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;text-align:center;}
+.step-item.active .step-lbl{color:var(--gold);}
+.step-item.done .step-lbl{color:var(--green);}
+
+/* ─── SELLER BANNER ─── */
+.seller-banner{
+  margin:16px 14px 0;
+  background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(245,200,66,0.03));
+  border:1px solid rgba(245,200,66,0.25);
+  border-radius:18px;padding:16px 18px;
+  display:none;align-items:center;gap:14px;
+  position:relative;overflow:hidden;
+}
+.seller-banner::before{
+  content:'';position:absolute;top:-30px;left:-30px;width:100px;height:100px;
+  background:radial-gradient(circle,rgba(245,200,66,0.15),transparent 70%);
+  pointer-events:none;
+}
+.seller-banner.show{display:flex;animation:fadeIn .5s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.sb-icon{
+  width:46px;height:46px;border-radius:13px;
+  background:linear-gradient(135deg,var(--gold),var(--goldd));
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+  box-shadow:0 4px 14px rgba(245,200,66,0.3);
+}
+.sb-info small{font-size:9px;color:var(--sub);font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+.sb-info b{display:block;font-size:15px;color:var(--gold);font-weight:800;margin-top:3px;}
+.sb-ref-btn{
+  margin-top:8px;
+  background:rgba(245,200,66,0.1);border:1px solid rgba(245,200,66,0.25);
+  color:var(--gold);font-size:11px;font-weight:700;
+  padding:7px 14px;border-radius:10px;cursor:pointer;
+  font-family:'Outfit',sans-serif;
+}
+
+/* ─── PENDING NOTICE ─── */
+.pending-notice{
+  margin:16px 14px 0;
+  background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.2);
+  border-radius:16px;padding:14px 18px;
+  display:none;align-items:center;gap:12px;
+}
+.pending-notice.show{display:flex;animation:fadeIn .4s ease;}
+.pn-icon{font-size:26px;}
+.pn-text small{font-size:10px;color:var(--sub);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.pn-text b{display:block;font-size:13px;color:#93c5fd;font-weight:700;margin-top:2px;}
+
+/* ─── SECTION LABEL ─── */
+.sec-label{
+  font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--sub);padding:24px 20px 13px;
+  display:flex;align-items:center;gap:10px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
+
+/* ─── PRODUCT CARDS ─── */
+.products{display:flex;flex-direction:column;gap:13px;padding:0 14px;}
+
+.prod-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+}
+.prod-card:active{transform:scale(.985);}
+.prod-card.featured{
+  border-color:rgba(245,200,66,0.3);
+  background:linear-gradient(150deg,#0d1525,#111e35);
+  box-shadow:0 0 30px rgba(245,200,66,0.06);
+}
+.prod-card.mid{
+  border-color:rgba(168,85,247,0.2);
+  background:linear-gradient(150deg,#0e1121,#110d1c);
+}
+
+/* glow corner */
+.prod-card::before{
+  content:'';position:absolute;top:-50px;right:-50px;
+  width:130px;height:130px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,200,66,0.07),transparent 70%);
+  pointer-events:none;
+}
+.prod-card.featured::before{background:radial-gradient(circle,rgba(245,200,66,0.14),transparent 70%);}
+.prod-card.mid::before{background:radial-gradient(circle,rgba(168,85,247,0.1),transparent 70%);}
+
+.pc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:15px;}
+
+.pc-icon{
+  width:50px;height:50px;border-radius:15px;
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  flex-shrink:0;
+}
+.icon-basic{background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(59,130,246,0.05));border:1px solid rgba(59,130,246,0.2);}
+.icon-mid{background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(168,85,247,0.05));border:1px solid rgba(168,85,247,0.2);}
+.icon-top{background:linear-gradient(135deg,rgba(245,200,66,0.22),rgba(245,200,66,0.05));border:1px solid rgba(245,200,66,0.25);}
+
+.pc-badge{
+  font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 11px;border-radius:8px;
+}
+.badge-starter{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.25);}
+.badge-popular{background:rgba(168,85,247,0.12);color:#c084fc;border:1px solid rgba(168,85,247,0.25);}
+.badge-best{background:rgba(245,200,66,0.12);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
+
+.pc-name{font-size:17px;font-weight:800;color:#fff;margin-bottom:5px;line-height:1.2;}
+.pc-desc{font-size:12px;color:var(--sub2);font-weight:400;line-height:1.6;}
+
+.pc-divider{height:1px;background:var(--border);margin:14px 0;}
+
+.pc-bottom{display:flex;align-items:center;justify-content:space-between;}
+.pc-price-block{}
+.pc-price-label{font-size:10px;color:var(--sub);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.pc-price{font-size:28px;font-weight:900;color:var(--gold);line-height:1;}
+.pc-price small{font-size:13px;font-weight:600;color:var(--sub);}
+
+.pc-actions{display:flex;gap:8px;flex-direction:column;align-items:flex-end;}
+.btn-buy{
+  background:linear-gradient(135deg,var(--gold),var(--goldd));
+  border:none;color:#000;font-weight:800;font-size:13px;
+  padding:12px 20px;border-radius:13px;cursor:pointer;
+  font-family:'Outfit',sans-serif;white-space:nowrap;
+  transition:opacity .15s,transform .15s,box-shadow .2s;
+  box-shadow:0 4px 16px rgba(245,200,66,0.25);
+}
+.btn-buy:active{transform:scale(.95);opacity:.85;}
+.btn-sell{
+  background:rgba(34,197,94,0.1);border:1.5px solid rgba(34,197,94,0.3);
+  color:var(--green);font-weight:800;font-size:13px;
+  padding:12px 20px;border-radius:13px;cursor:pointer;
+  font-family:'Outfit',sans-serif;display:none;white-space:nowrap;
+  transition:opacity .15s,transform .15s;
+}
+.btn-sell.show{display:block;}
+.btn-sell:active{transform:scale(.95);}
+
+/* ─── PERKS ROW ─── */
+.pc-perks{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;}
+.perk-tag{
+  font-size:10px;font-weight:600;color:var(--sub2);
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:6px;padding:3px 9px;
+}
+
+/* ─── MODAL BACKDROP ─── */
+.modal-backdrop{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.88);backdrop-filter:blur(6px);
+  z-index:9000;align-items:flex-end;justify-content:center;
+}
+.modal-backdrop.open{display:flex;}
+
+.modal-sheet{
+  background:var(--card2);
+  border-radius:28px 28px 0 0;
+  border-top:1px solid var(--border2);
+  width:100%;max-width:480px;
+  padding:24px 22px 44px;
+  animation:slideUp .32s cubic-bezier(.34,1.3,.64,1);
+  max-height:92vh;overflow-y:auto;
+}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+
+.modal-handle{width:38px;height:4px;background:rgba(255,255,255,0.1);border-radius:4px;margin:0 auto 20px;}
+.modal-title{font-size:19px;font-weight:800;color:#fff;margin-bottom:3px;}
+.modal-sub{font-size:12px;color:var(--sub2);margin-bottom:20px;line-height:1.5;}
+
+/* STEP INDICATOR inside modal */
+.m-steps{
+  display:flex;align-items:center;gap:0;
+  margin-bottom:20px;
+  background:var(--card3);border:1px solid var(--border);
+  border-radius:14px;padding:10px 14px;
+}
+.ms-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;}
+.ms-item:not(:last-child)::after{
+  content:'›';position:absolute;right:-6px;top:6px;
+  color:var(--sub);font-size:14px;font-weight:900;
+}
+.ms-num{
+  width:24px;height:24px;border-radius:50%;
+  font-size:10px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.05);color:var(--sub);
+  border:1px solid var(--border);
+}
+.ms-item.active .ms-num{background:var(--gold);color:#000;border-color:var(--gold);}
+.ms-item.done .ms-num{background:rgba(34,197,94,0.2);color:var(--green);border-color:var(--green);}
+.ms-lbl{font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;}
+.ms-item.active .ms-lbl{color:var(--gold);}
+.ms-item.done .ms-lbl{color:var(--green);}
+
+/* AMOUNT BOX */
+.pay-amount-box{
+  background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(245,200,66,0.03));
+  border:1px solid rgba(245,200,66,0.22);
+  border-radius:16px;padding:16px 20px;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.pab-label{font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.pab-val{font-size:30px;font-weight:900;color:var(--gold);}
+.pab-product{font-size:11px;color:var(--sub2);margin-top:2px;}
+
+/* ACCOUNT CARD */
+.acct-card{
+  background:var(--card3);border:1px solid var(--border);
+  border-radius:16px;padding:0;margin-bottom:16px;overflow:hidden;
+}
+.acct-head{
+  padding:10px 18px;
+  background:rgba(255,255,255,0.03);
+  border-bottom:1px solid var(--border);
+  font-size:10px;font-weight:800;color:var(--sub);
+  text-transform:uppercase;letter-spacing:1px;
+}
+.acct-row{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;}
+.acct-row:not(:last-child){border-bottom:1px solid var(--border);}
+.acct-key{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;}
+.acct-val{font-size:14px;font-weight:800;color:#fff;}
+.acct-num{color:var(--green);font-size:17px;letter-spacing:1.5px;font-family:'Outfit',monospace;}
+
+.copy-btn{
+  background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);
+  color:var(--gold);font-size:10px;font-weight:700;
+  padding:5px 12px;border-radius:8px;cursor:pointer;
+  font-family:'Outfit',sans-serif;letter-spacing:.3px;
+}
+.copy-btn:active{opacity:.6;}
+
+/* INFO NOTE */
+.info-note{
+  background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.18);
+  border-radius:12px;padding:12px 16px;font-size:12px;
+  color:#93c5fd;line-height:1.7;margin-bottom:16px;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.info-note.green{background:rgba(34,197,94,0.07);border-color:rgba(34,197,94,0.18);color:#86efac;}
+
+/* BUTTONS */
+.btn-paid{
+  width:100%;
+  background:linear-gradient(135deg,var(--gold),var(--goldd));
+  border:none;color:#000;font-weight:800;font-size:15px;
+  padding:16px;border-radius:16px;cursor:pointer;
+  font-family:'Outfit',sans-serif;
+  transition:opacity .15s,transform .15s;
+  box-shadow:0 6px 20px rgba(245,200,66,0.28);
+  display:flex;align-items:center;justify-content:center;gap:9px;
+}
+.btn-paid:active{opacity:.85;transform:scale(.98);}
+
+.btn-modal-close{
+  width:100%;background:none;border:1px solid var(--border2);
+  color:var(--sub);font-weight:700;font-size:13px;
+  padding:13px;border-radius:14px;cursor:pointer;
+  font-family:'Outfit',sans-serif;margin-top:10px;
+  transition:background .15s;
+}
+.btn-modal-close:hover{background:rgba(255,255,255,0.04);}
+
+/* ─── REGISTRATION FORM ─── */
+.reg-section{display:none;animation:fadeIn .3s ease;}
+.reg-section.show{display:block;}
+
+.form-divider{height:1px;background:var(--border);margin:18px 0;}
+
+.form-group{margin-bottom:15px;}
+.form-label{
+  font-size:11px;font-weight:700;color:var(--sub2);
+  text-transform:uppercase;letter-spacing:.6px;
+  display:block;margin-bottom:8px;
+}
+.form-inp{
+  width:100%;background:var(--card3);
+  border:1.5px solid var(--border2);
+  color:#fff;font-family:'Outfit',sans-serif;
+  font-size:14px;font-weight:500;
+  padding:13px 16px;border-radius:13px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  text-align:left;direction:ltr;
+}
+.form-inp::placeholder{color:var(--sub);}
+.form-inp:focus{
+  border-color:rgba(245,200,66,0.45);
+  box-shadow:0 0 0 3px rgba(245,200,66,0.08);
+}
+
+.btn-submit{
+  width:100%;
+  background:linear-gradient(135deg,var(--green),#16a34a);
+  border:none;color:#fff;font-weight:800;font-size:15px;
+  padding:16px;border-radius:16px;cursor:pointer;
+  font-family:'Outfit',sans-serif;margin-top:4px;
+  transition:opacity .15s,transform .15s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 6px 20px rgba(34,197,94,0.25);
+}
+.btn-submit:active{opacity:.85;transform:scale(.98);}
+.btn-submit:disabled{background:var(--card3);color:var(--sub);cursor:not-allowed;box-shadow:none;}
+
+/* ─── SHARE MODAL ─── */
+.share-hero{
+  text-align:center;padding:20px;
+  background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(34,197,94,0.02));
+  border:1px solid rgba(34,197,94,0.2);
+  border-radius:18px;margin-bottom:16px;
+}
+.share-hero-icon{font-size:44px;margin-bottom:8px;}
+.share-hero-ttl{font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;}
+.share-hero-sub{font-size:12px;color:var(--sub2);}
+
+.share-link-box{
+  background:var(--card3);border:1px solid var(--border2);
+  border-radius:13px;padding:12px 16px;
+  font-size:12px;color:var(--sub2);
+  word-break:break-all;text-align:left;direction:ltr;
+  line-height:1.6;margin-bottom:12px;
+}
+.btn-copy-link{
+  width:100%;background:linear-gradient(135deg,var(--green),#16a34a);
+  border:none;color:#fff;font-weight:800;font-size:14px;
+  padding:15px;border-radius:15px;cursor:pointer;
+  font-family:'Outfit',sans-serif;
+  box-shadow:0 5px 18px rgba(34,197,94,0.22);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+
+/* ─── FOOTER ─── */
+.footer{
+  text-align:center;padding:32px 20px 12px;
+  font-size:11px;color:var(--sub);line-height:1.8;
+}
+.footer b{color:var(--sub2);}
+</style>
+</head>
+<body>
+
+<!-- ══ PAGE LOADER ══ -->
+<div id="page-loader">
+  <div class="ld-brand">
+    <div class="ld-icon">🏪</div>
+    <div class="ld-name">Digital <span>Reseller</span></div>
+  </div>
+  <div class="ld-dots">
+    <div class="ld-dot"></div>
+    <div class="ld-dot"></div>
+    <div class="ld-dot"></div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════
+     MAIN PAGE
+══════════════════════════════════ -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-badge">⚡ Official Store</div>
+    <div class="hdr-logo-wrap">🏪</div>
+    <h1 class="hdr-title">Digital <span>Reseller</span><br>Platform</h1>
+    <p class="hdr-sub">Products kharidein · Sell karein · Paisa kamaein</p>
+    <div class="status-pill">
+      <span class="status-dot"></span>
+      <span id="status-txt">System Check Jari Hai...</span>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS — STEPS -->
+  <div class="steps-strip">
+    <div class="step-item active" id="step1">
+      <div class="step-num">1</div>
+      <div class="step-lbl">Kharidein</div>
+    </div>
+    <div class="step-item" id="step2">
+      <div class="step-num">2</div>
+      <div class="step-lbl">Pay Karein</div>
+    </div>
+    <div class="step-item" id="step3">
+      <div class="step-num">3</div>
+      <div class="step-lbl">Register</div>
+    </div>
+    <div class="step-item" id="step4">
+      <div class="step-num">4</div>
+      <div class="step-lbl">Approved</div>
+    </div>
+    <div class="step-item" id="step5">
+      <div class="step-num">✓</div>
+      <div class="step-lbl">Sell Karein</div>
+    </div>
+  </div>
+
+  <!-- PENDING NOTICE -->
+  <div class="pending-notice" id="pending-notice">
+    <div class="pn-icon">⏳</div>
+    <div class="pn-text">
+      <small>Application Status</small>
+      <b>Admin verify kar raha hai — please wait</b>
+    </div>
+  </div>
+
+  <!-- APPROVED SELLER BANNER -->
+  <div class="seller-banner" id="seller-banner">
+    <div class="sb-icon">🏆</div>
+    <div class="sb-info" style="flex:1;">
+      <small>Aapka Status</small>
+      <b>✅ Approved Reseller</b>
+      <button class="sb-ref-btn" onclick="openShare()">📤 Referral Link Lein</button>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="sec-label">Products Choose Karein</div>
+
+  <div class="products">
+
+    <!-- Product 1 — Starter -->
+    <div class="prod-card" id="card-200">
+      <div class="pc-header">
+        <div class="pc-icon icon-basic">📦</div>
+        <span class="pc-badge badge-starter">Starter</span>
+      </div>
+      <div class="pc-name">Basic Canva Bundle</div>
+      <div class="pc-desc">200+ premium Canva templates — social media, posters, stories, thumbnails aur bohat kuch</div>
+      <div class="pc-perks">
+        <span class="perk-tag">📁 200+ Templates</span>
+        <span class="perk-tag">🎨 Fully Editable</span>
+        <span class="perk-tag">📱 Social Ready</span>
+      </div>
+      <div class="pc-divider"></div>
+      <div class="pc-bottom">
+        <div class="pc-price-block">
+          <div class="pc-price-label">Sirf</div>
+          <div class="pc-price">Rs. <span>200</span></div>
+        </div>
+        <div class="pc-actions">
+          <button class="btn-buy" onclick="openPayment(200,'Basic Canva Bundle')">🛒 Abhi Kharidein</button>
+          <button class="btn-sell show-on-approve" id="sell-200" onclick="openShare()">📤 Sale Karein</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2 — Mid (purple theme) -->
+    <div class="prod-card mid" id="card-300">
+      <div class="pc-header">
+        <div class="pc-icon icon-mid">📚</div>
+        <span class="pc-badge badge-popular">🔥 Popular</span>
+      </div>
+      <div class="pc-name">Marketing Master Guide</div>
+      <div class="pc-desc">Complete digital marketing course — Facebook, Instagram, WhatsApp advertising aur sales funnels</div>
+      <div class="pc-perks">
+        <span class="perk-tag">📘 Full Course</span>
+        <span class="perk-tag">📲 Social Media</span>
+        <span class="perk-tag">💡 Ads Guide</span>
+      </div>
+      <div class="pc-divider"></div>
+      <div class="pc-bottom">
+        <div class="pc-price-block">
+          <div class="pc-price-label">Sirf</div>
+          <div class="pc-price" style="color:#c084fc;">Rs. <span>300</span></div>
+        </div>
+        <div class="pc-actions">
+          <button class="btn-buy" style="background:linear-gradient(135deg,#a855f7,#7c3aed);" onclick="openPayment(300,'Marketing Master Guide')">🛒 Abhi Kharidein</button>
+          <button class="btn-sell show-on-approve" id="sell-300" onclick="openShare()">📤 Sale Karein</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3 — Featured Gold -->
+    <div class="prod-card featured" id="card-500">
+      <div class="pc-header">
+        <div class="pc-icon icon-top">👑</div>
+        <span class="pc-badge badge-best">⭐ Best Value</span>
+      </div>
+      <div class="pc-name">Master Reseller Rights</div>
+      <div class="pc-desc">Tamam products resell karein — unlimited earning potential, complete reseller rights aur support</div>
+      <div class="pc-perks">
+        <span class="perk-tag">♾️ Unlimited Earn</span>
+        <span class="perk-tag">🔑 Full Rights</span>
+        <span class="perk-tag">🤝 Support</span>
+      </div>
+      <div class="pc-divider"></div>
+      <div class="pc-bottom">
+        <div class="pc-price-block">
+          <div class="pc-price-label">Sirf</div>
+          <div class="pc-price">Rs. <span>500</span></div>
+        </div>
+        <div class="pc-actions">
+          <button class="btn-buy" onclick="openPayment(500,'Master Reseller Rights')">🛒 Abhi Kharidein</button>
+          <button class="btn-sell show-on-approve" id="sell-500" onclick="openShare()">📤 Sale Karein</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © 2026 <b>Digital Reseller Platform</b><br>
+    Secured by Google Apps Script Backend · Auto Sheet Setup
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     PAYMENT MODAL
+══════════════════════════════════════ -->
+<div class="modal-backdrop" id="pay-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+
+    <!-- Modal Steps -->
+    <div class="m-steps">
+      <div class="ms-item done" id="ms1">
+        <div class="ms-num">✓</div>
+        <div class="ms-lbl">Product</div>
+      </div>
+      <div class="ms-item active" id="ms2">
+        <div class="ms-num">2</div>
+        <div class="ms-lbl">Pay Karein</div>
+      </div>
+      <div class="ms-item" id="ms3">
+        <div class="ms-num">3</div>
+        <div class="ms-lbl">Register</div>
+      </div>
+    </div>
+
+    <div class="modal-title" id="pm-title">Payment Details</div>
+    <div class="modal-sub">Neeche diye account mein payment karein</div>
+
+    <!-- Amount -->
+    <div class="pay-amount-box">
+      <div>
+        <div class="pab-label">Total Amount</div>
+        <div class="pab-val" id="pm-amount">Rs. 0</div>
+        <div class="pab-product" id="pm-product-name"></div>
+      </div>
+      <div style="font-size:36px;">💳</div>
+    </div>
+
+    <!-- Account Details -->
+    <div class="acct-card">
+      <div class="acct-head">💼 Payment Account Details</div>
+      <div class="acct-row">
+        <span class="acct-key">Account Title</span>
+        <span class="acct-val" id="pm-acc-title">Loading...</span>
+      </div>
+      <div class="acct-row">
+        <span class="acct-key">Account No.</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="acct-val acct-num" id="pm-acc-num">Loading...</span>
+          <button class="copy-btn" onclick="copyAccNum()">📋 Copy</button>
+        </div>
+      </div>
+      <div class="acct-row">
+        <span class="acct-key">Wallet</span>
+        <span class="acct-val">EasyPaisa / JazzCash</span>
+      </div>
+    </div>
+
+    <div class="info-note">
+      ℹ️ Payment karne ke baad <b>"Maine Pay Kar Diya"</b> press karein aur apni details fill karein — admin 24 ghante mein verify karta hai.
+    </div>
+
+    <!-- Paid Section -->
+    <div id="paid-section">
+      <button class="btn-paid" onclick="showRegForm()">
+        ✅ Maine Pay Kar Diya — Aage Barhen
+      </button>
+      <button class="btn-modal-close" onclick="closeModal('pay-modal')">❌ Cancel</button>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="reg-section" id="reg-form">
+      <div class="form-divider"></div>
+
+      <!-- Update modal steps -->
+      <div class="m-steps" style="margin-bottom:16px;">
+        <div class="ms-item done">
+          <div class="ms-num">✓</div>
+          <div class="ms-lbl">Product</div>
+        </div>
+        <div class="ms-item done">
+          <div class="ms-num">✓</div>
+          <div class="ms-lbl">Pay Karein</div>
+        </div>
+        <div class="ms-item active">
+          <div class="ms-num">3</div>
+          <div class="ms-lbl">Register</div>
+        </div>
+      </div>
+
+      <div class="modal-title" style="margin-bottom:3px;">📝 Registration Form</div>
+      <div class="modal-sub">Apni details fill karein — admin verify karega</div>
+
+      <div class="form-group">
+        <label class="form-label">Pura Naam</label>
+        <input type="text" class="form-inp" id="r-name" placeholder="Muhammad Ali Khan">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Account Title (Jis naam pe account)</label>
+        <input type="text" class="form-inp" id="r-title" placeholder="Ali Khan">
+      </div>
+      <div class="form-group">
+        <label class="form-label">EasyPaisa / JazzCash Number</label>
+        <input type="tel" class="form-inp" id="r-num" placeholder="03001234567" maxlength="11" inputmode="numeric">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Transaction ID (Trx ID)</label>
+        <input type="text" class="form-inp" id="r-trx" placeholder="AA1234567890" style="text-transform:uppercase;">
+      </div>
+
+      <div class="info-note green" style="margin-bottom:14px;">
+        ✅ Form submit hone ke baad admin verify karega aur aapko seller access mil jaye ga.
+      </div>
+
+      <button class="btn-submit" id="r-btn" onclick="submitRegistration()">
+        <span>📤</span> Admin ko Bhejen
+      </button>
+      <button class="btn-modal-close" onclick="closeModal('pay-modal')">Cancel</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SHARE / REFERRAL MODAL
+══════════════════════════════════════ -->
+<div class="modal-backdrop" id="share-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Referral Link</div>
+    <div class="modal-sub">Yeh link share karein — jab koi khareedta hai, commission aapka</div>
+
+    <div class="share-hero">
+      <div class="share-hero-icon">🔗</div>
+      <div class="share-hero-ttl">Aapka Personal Referral Link</div>
+      <div class="share-hero-sub">Share karein aur paisa kamaein</div>
+    </div>
+
+    <div class="share-link-box" id="share-link-txt">---</div>
+
+    <button class="btn-copy-link" onclick="copyShareLink()">
+      📋 Link Copy Karein
+    </button>
+
+    <div class="info-note green" style="margin-top:14px;">
+      ✅ Jab koi aapke link se buy kare toh payment aapke registered account mein jaaye gi.
+    </div>
+
+    <button class="btn-modal-close" onclick="closeModal('share-modal')">Close</button>
+  </div>
+</div>
+
+
+<script>
+// ═══════════════════════════════════════════
+//   CONFIG
+// ═══════════════════════════════════════════
+const GAS = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
+
+const urlParams = new URLSearchParams(window.location.search);
+const sellerID  = urlParams.get('s') || "admin";
+const localUID  = localStorage.getItem("ds_user_id") || "";
+
+var currentPrice   = 0;
+var currentProduct = "";
+var sellerAccTitle = "Admin";
+var sellerAccNum   = "03001234567";
+var isApproved     = false;
+var userStatus     = "";
+var myShareLink    = "";
+
+// ── INIT ─────────────────────────────────
+async function init() {
+  try {
+    var url = GAS + "?action=get_info&seller=" + encodeURIComponent(sellerID)
+            + (localUID ? "&uid=" + encodeURIComponent(localUID) : "");
+    var res  = await fetch(url);
+    var data = await res.json();
+
+    if (data.seller) {
+      sellerAccTitle = data.seller.title || "Admin";
+      sellerAccNum   = data.seller.num   || "03001234567";
+    }
+
+    if (data.user) {
+      userStatus = data.user.status || "Pending";
+      if (userStatus === "Approved") {
+        isApproved  = true;
+        myShareLink = window.location.origin + window.location.pathname + "?s=" + localUID;
+        showApprovedUI();
+      } else if (userStatus === "Pending") {
+        showPendingUI();
+      }
+    }
+
+    document.getElementById("status-txt").innerText = "System Active ✓";
+  } catch(e) {
+    document.getElementById("status-txt").innerText = "Offline Mode";
+  } finally {
+    hideLdr();
+  }
+}
+
+// ── UI STATES ──────────────────────────────
+function showApprovedUI() {
+  // Steps — all done
+  setStep("step1","done"); setStep("step2","done");
+  setStep("step3","done"); setStep("step4","done");
+  setStep("step5","active");
+
+  document.getElementById("seller-banner").classList.add("show");
+  document.getElementById("pending-notice").classList.remove("show");
+
+  // Show sell buttons, hide buy buttons
+  document.querySelectorAll(".btn-buy").forEach(function(b){ b.style.display="none"; });
+  document.querySelectorAll(".show-on-approve").forEach(function(b){ b.classList.add("show"); });
+}
+
+function showPendingUI() {
+  setStep("step1","done"); setStep("step2","done");
+  setStep("step3","done"); setStep("step4","active");
+  document.getElementById("pending-notice").classList.add("show");
+}
+
+function setStep(id, cls) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove("active","done");
+  if (cls) el.classList.add(cls);
+}
+
+function hideLdr() {
+  var ldr = document.getElementById("page-loader");
+  ldr.style.opacity = "0";
+  setTimeout(function(){ ldr.style.display = "none"; }, 500);
+}
+
+// ── PAYMENT MODAL ─────────────────────────
+function openPayment(price, product) {
+  currentPrice   = price;
+  currentProduct = product;
+  document.getElementById("pm-title").innerText        = product;
+  document.getElementById("pm-amount").innerText       = "Rs. " + price;
+  document.getElementById("pm-product-name").innerText = product;
+  document.getElementById("pm-acc-title").innerText    = sellerAccTitle;
+  document.getElementById("pm-acc-num").innerText      = sellerAccNum;
+
+  // Reset modal to step 2
+  document.getElementById("reg-form").classList.remove("show");
+  document.getElementById("paid-section").style.display = "block";
+
+  openModal("pay-modal");
+
+  // Update page steps
+  setStep("step1","done"); setStep("step2","active");
+}
+
+function showRegForm() {
+  document.getElementById("paid-section").style.display = "none";
+  document.getElementById("reg-form").classList.add("show");
+  setStep("step2","done"); setStep("step3","active");
+}
+
+function copyAccNum() {
+  var num = document.getElementById("pm-acc-num").innerText;
+  navigator.clipboard.writeText(num).then(function(){
+    showToast("✅ Account number copy ho gaya!");
+  });
+}
+
+// ── REGISTRATION ─────────────────────────
+async function submitRegistration() {
+  var name  = document.getElementById("r-name").value.trim();
+  var title = document.getElementById("r-title").value.trim();
+  var num   = document.getElementById("r-num").value.trim();
+  var trx   = document.getElementById("r-trx").value.trim();
+
+  if (!name || !num || !trx) {
+    showToast("⚠️ Tamam fields zarori hain!"); return;
+  }
+  if (num.length < 10) {
+    showToast("⚠️ Phone number sahi darj karein!"); return;
+  }
+
+  var btn = document.getElementById("r-btn");
+  btn.disabled = true;
+  btn.innerHTML = "<span>⏳</span> Bheji ja rahi hai...";
+
+  var uid  = "U" + Date.now();
+  var body = {
+    action  : "register",
+    uid     : uid,
+    name    : name,
+    title   : title,
+    number  : num,
+    trx     : trx,
+    product : currentProduct,
+    amount  : currentPrice,
+    seller  : sellerID
+  };
+
+  try {
+    await fetch(GAS, { method:"POST", body:JSON.stringify(body) });
+    localStorage.setItem("ds_user_id", uid);
+    showToast("✅ Application bheji gayi! Admin verify karega.");
+    setStep("step3","done"); setStep("step4","active");
+    document.getElementById("pending-notice").classList.add("show");
+    setTimeout(function(){ closeModal("pay-modal"); }, 2000);
+  } catch(e) {
+    showToast("❌ Network error! Dobara try karein.");
+    btn.disabled = false;
+    btn.innerHTML = "<span>📤</span> Admin ko Bhejen";
+  }
+}
+
+// ── SHARE MODAL ───────────────────────────
+function openShare() {
+  if (!myShareLink) {
+    myShareLink = window.location.origin + window.location.pathname + "?s=" + localUID;
+  }
+  document.getElementById("share-link-txt").innerText = myShareLink;
+  openModal("share-modal");
+}
+
+function copyShareLink() {
+  navigator.clipboard.writeText(myShareLink).then(function(){
+    showToast("✅ Link copy ho gaya! Share karein aur kamaein 💰");
+  });
+}
+
+// ── MODAL HELPERS ─────────────────────────
+function openModal(id)  { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+document.querySelectorAll(".modal-backdrop").forEach(function(el) {
+  el.addEventListener("click", function(e){
+    if (e.target === el) el.classList.remove("open");
+  });
+});
+
+// ── TOAST ─────────────────────────────────
+var toastTimer;
+function showToast(msg) {
+  var t = document.getElementById("toast");
+  t.innerText = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 3000);
+}
+
+// ── START ─────────────────────────────────
+window.addEventListener("load", init);
+</script>
+</body>
+</html>
